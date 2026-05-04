@@ -112,44 +112,44 @@ export default function App() {
       }
     `;
 
-    let response;
-    let success = false;
-    let lastError = null;
-    const modelsToTry = ['gemini-3-flash-preview', 'gemini-1.5-flash', 'gemini-2.0-flash'];
-
-    for (const model of modelsToTry) {
-      try {
-        response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: {
-                responseMimeType: 'application/json',
-              },
-            }),
-          }
-        );
-
-        if (response.ok) {
-          success = true;
-          break;
-        } else {
-          const errData = await response.json().catch(() => ({}));
-          lastError = errData?.error?.message || response.statusText;
-        }
-      } catch (err) {
-        lastError = err.message;
-      }
-    }
-
-    if (!success) {
-      throw new Error(`API error: ${lastError || 'Could not connect to Gemini.'}`);
-    }
-
     try {
+      let response;
+      let success = false;
+      let lastError = null;
+      const modelsToTry = ['gemini-3-flash-preview', 'gemini-1.5-flash', 'gemini-2.0-flash'];
+
+      for (const model of modelsToTry) {
+        try {
+          response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                  responseMimeType: 'application/json',
+                },
+              }),
+            }
+          );
+
+          if (response.ok) {
+            success = true;
+            break;
+          } else {
+            const errData = await response.json().catch(() => ({}));
+            lastError = errData?.error?.message || response.statusText;
+          }
+        } catch (err) {
+          lastError = err.message;
+        }
+      }
+
+      if (!success) {
+        throw new Error(`API error: ${lastError || 'Could not connect to Gemini.'}`);
+      }
+
       const data = await response.json();
       const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       
