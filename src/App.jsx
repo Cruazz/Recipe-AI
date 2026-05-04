@@ -154,7 +154,11 @@ export default function App() {
       }
 
       if (!success) {
-        throw new Error(`API error: ${lastError || 'Could not connect to Gemini.'}`);
+        let msg = lastError || 'Could not connect to Gemini.';
+        if (msg.toLowerCase().includes('leaked') || msg.toLowerCase().includes('quota')) {
+          msg = 'Your Gemini API key has been reported as leaked or its free quota has been exceeded. Please generate a fresh API key from Google AI Studio and update it in your Netlify site settings.';
+        }
+        throw new Error(`API error: ${msg}`);
       }
 
       const data = await response.json();
