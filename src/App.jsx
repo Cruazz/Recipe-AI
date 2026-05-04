@@ -117,18 +117,17 @@ export default function App() {
       let success = false;
       let lastError = null;
       const modelsToTry = [
-        'gemini-2.5-flash',
-        'gemini-2.5-flash-lite',
-        'gemini-2.5-flash-lite-preview',
-        'gemini-3-flash-preview',
-        'gemini-2.0-flash',
-        'gemini-1.5-flash'
+        { version: 'v1', name: 'gemini-1.5-flash' },
+        { version: 'v1beta', name: 'gemini-1.5-flash' },
+        { version: 'v1', name: 'gemini-2.0-flash' },
+        { version: 'v1beta', name: 'gemini-2.0-flash' },
+        { version: 'v1beta', name: 'gemini-2.5-flash' }
       ];
 
-      for (const model of modelsToTry) {
+      for (const item of modelsToTry) {
         try {
           response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/${item.version}/models/${item.name}:generateContent?key=${apiKey}`,
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
