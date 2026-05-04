@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 export default function App() {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyCAbQ30PB6Q6N5lgVlrLPqZ0dfnbWjYUL4';
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   const [ingredients, setIngredients] = useState([]);
   const [currentIngredient, setCurrentIngredient] = useState('');
   const [cuisine, setCuisine] = useState('Any');
